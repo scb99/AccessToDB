@@ -1,0 +1,9 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetCountOfPastDue31To60DaysSP`()
+BEGIN
+	SELECT 
+		COUNT(DISTINCT user_id) AS Result
+	FROM  
+		wpFegK6_pmpro_memberships_users pmu
+	WHERE 
+		(pmu.enddate BETWEEN CURDATE() - INTERVAL 60 DAY AND CURDATE() - INTERVAL 30 DAY) AND pmu.status = 'active';
+END

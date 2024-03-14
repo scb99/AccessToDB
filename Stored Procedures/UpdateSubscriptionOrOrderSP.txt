@@ -1,0 +1,8 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `UpdateSubscriptionOrOrderSP`(in MetaID int, in ExistingID int)
+BEGIN
+    update wpFegK6_postmeta
+    set
+        meta_value=ExistingID
+	where
+        meta_id=MetaID;
+END

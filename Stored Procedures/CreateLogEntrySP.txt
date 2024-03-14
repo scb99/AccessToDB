@@ -1,0 +1,5 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `CreateLogEntrySP`(in UserID int, in MessageType varchar(45), in Message varchar(1500))
+BEGIN
+insert into wpFegK6_logs (UserID, MessageType, Message)
+values (UserID, MessageType, Message);
+END

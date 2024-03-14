@@ -1,0 +1,57 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetMemberDetailsSP`(in UserID int)
+BEGIN
+	SELECT 
+		um.umeta_id AS ID,
+		um.user_id AS UserID,
+		um.meta_key AS Property,
+		um.meta_value AS Value
+	FROM  
+		wpFegK6_usermeta um
+	WHERE 
+		um.user_id=UserID
+			AND 
+		um.meta_key IN 
+			 ('last_name', 
+			  'first_name',
+			  'billing_address_1',
+			  'billing_address_2',
+			  'billing_city',
+			  'billing_state',
+			  'billing_postcode',
+			  'billing_phone',
+			  'other_phone',
+			  'skill_rating',
+			  'birth_date',
+			  'gender',
+			  'comments',
+			  'board_member',
+			  'annual_meeting',
+			  'party_volunteer',
+			  'tournament_volunteer',
+			  'email_privacy',
+			  'expiration_notice',
+			  'contact',
+			  'career',
+			  'special_skills',
+			  'stpc_note',
+			  'lifetime_member',
+			  'test_account',
+			  'deceased',
+			  'administrator',
+			  'billing_country',
+			  'billing_email',
+			  'billing_first_name',
+			  'billing_last_name',
+              'role',
+			  'annual_mtg',
+			  'address1',
+			  'address2',
+			  'city',
+			  'home_phone',
+			  'zip',
+			  'state',
+			  'order_total',
+			  'payment_method',
+			  'payment_method_title',
+			  'schedule_next_payment');
+END

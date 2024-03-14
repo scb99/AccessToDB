@@ -1,0 +1,9 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `UpdateEmailAddressSP`(in UserID bigint(20), in UserEmail varchar(100))
+BEGIN
+update 
+   wpFegK6_users
+set    
+   user_email = UserEmail
+where  
+   ID = UserID;
+END

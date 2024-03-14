@@ -1,0 +1,28 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetCountOfMembersInGoodStandingWithoutEmailAddressesSP`()
+BEGIN
+	SELECT 
+		COUNT(t2.id) AS Result
+	FROM    
+	   (SELECT 
+			u.id, u.user_email
+		FROM   
+			wpFegK6_users u
+		INNER JOIN 
+		   (SELECT 
+				pmu1.user_id, pmu1.enddate
+			FROM   
+				wpFegK6_pmpro_memberships_users pmu1
+			WHERE  
+			   enddate = 
+				  (SELECT
+					   MAX(pmu2.enddate)
+				   FROM   
+					   wpFegK6_pmpro_memberships_users pmu2
+				   WHERE  
+					   pmu1.user_id = pmu2.user_id)
+		   ) AS t1
+	   ON 
+		   u.id = t1.user_id
+	   WHERE 
+		   t1.enddate > CURDATE() AND u.user_email like '%stpc%') AS t2;
+END

@@ -1,0 +1,34 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetRosterForPopUpTennisSP`(in GracePeriod int)
+BEGIN
+select
+   max( case when um.meta_key = 'first_name'           then um.meta_value end ) as FirstName,
+   max( case when um.meta_key = 'last_name'            then um.meta_value end ) as LastName,
+   concat(max( case when um.meta_key = 'last_name' then um.meta_value end), ', ',  max( case when um.meta_key = 'first_name' then um.meta_value end )) as Name,
+   max( case when um.meta_key = 'gender'               then um.meta_value end ) as Gender,
+   max( case when um.meta_key = 'skill_rating'         then um.meta_value end) as Rating,
+   max( case when um.meta_key = 'billing_phone'        then um.meta_value end) as HomePhone,
+   max( case when um.meta_key = 'other_phone'          then um.meta_value else '' end) as OtherPhone,
+   max( case when um.meta_key = 'billing_address_1'    then um.meta_value end ) as Address1,
+   max( case when um.meta_key = 'billing_address_2'    then um.meta_value end ) as Address2,
+   max( case when um.meta_key = 'billing_city'         then um.meta_value end ) as City,
+   max( case when um.meta_key = 'billing_state'        then um.meta_value end ) as State,
+   max( case when um.meta_key = 'billing_postcode'     then um.meta_value end ) as Zip,
+   u.user_email as EmailAddress,
+   max( case when um.meta_key = 'deceased'             then um.meta_value else '' end ) as Deceased,
+   max( case when um.meta_key = 'contact'              then um.meta_value else '' end ) as Contact,
+   u.ID as UserID,
+   max( case when um.meta_key = 'birth_date'           then um.meta_value end ) as BirthDate
+   
+from
+   wpFegK6_users u
+       join
+    wpFegK6_usermeta um on u.ID = um.user_id
+       join     
+	wpFegK6_pmpro_memberships_users pm on u.ID = pm.user_id
+	   where    pm.status = 'active'
+       and      pm.enddate >= DATE_SUB(curdate(), INTERVAL GracePeriod DAY)
+group by
+   um.user_id
+order by
+   LastName, FirstName;
+END

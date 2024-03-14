@@ -1,0 +1,9 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `UpdateSubscriptionNextPaymentDateSP`(in recordID int, in nextPaymentDate varchar(255))
+BEGIN
+    update
+        wpFegK6_postmeta
+	set
+        meta_value = nextPaymentDate
+	where
+        post_id = recordID and meta_key = '_schedule_next_payment';
+END

@@ -1,0 +1,31 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetMembersWithoutEmailAddressesSP`(in GracePeriod int)
+BEGIN
+select
+   max( case when um.meta_key = 'last_name'            then um.meta_value end) as LastName,
+   max( case when um.meta_key = 'first_name'           then um.meta_value end) as FirstName,
+   concat(max( case when um.meta_key = 'last_name' then um.meta_value end), ', ',  max( case when um.meta_key = 'first_name' then um.meta_value end)) as Name,
+   max( case when um.meta_key = 'billing_address_1'    then um.meta_value end) as Address1,
+   max( case when um.meta_key = 'billing_address_2'    then um.meta_value end) as Address2,
+   max( case when um.meta_key = 'billing_city'         then um.meta_value end) as City,
+   max( case when um.meta_key = 'billing_state'        then um.meta_value end) as State,
+   max( case when um.meta_key = 'billing_postcode'     then um.meta_value end) as Zip,
+   date_format(pm.enddate, '%M') as Month,
+   date_format(pm.enddate, '%e') as Day,
+   date_format(pm.enddate, '%Y') as Year,
+   date_format(pm.enddate, '%M %d, %Y') as RenewalDate,
+   u.user_email as EmailAddress,
+   max( case when um.meta_key = 'deceased'             then um.meta_value end) as Deceased
+from
+   wpFegK6_users u
+       join
+    wpFegK6_usermeta um on u.ID = um.user_id
+       join
+    wpFegK6_pmpro_memberships_users pm on u.ID = pm.user_id
+       where pm.status = 'active'
+       and u.user_email like 'stpc%'
+       and pm.enddate >= DATE_SUB(curdate(), INTERVAL GracePeriod DAY)
+group by
+   um.user_id
+order by
+   LastName, FirstName;
+END

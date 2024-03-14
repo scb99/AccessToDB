@@ -1,0 +1,9 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `UpdateSubscriptionStatusSP`(in recordID int, in newStatus varchar(255))
+BEGIN
+    update
+        wpFegK6_posts
+	set
+        post_status = newStatus
+	where
+        ID = recordID;
+END 

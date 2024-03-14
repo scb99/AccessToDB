@@ -1,0 +1,13 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `UpdatePaymentDetailSP`(in RecordID int, in UserID int, in MembershipID int, in Status varchar(50), in InitialPayment varchar(50), in StartDate datetime, in EndDate datetime)
+BEGIN
+update 
+   wpFegK6_pmpro_memberships_users 
+set 
+   membership_id = MembershipID, 
+   initial_payment = InitialPayment, 
+   status = Status, 
+   startdate = StartDate, 
+   enddate = EndDate
+where 
+   id = RecordID and user_id = UserID;
+END

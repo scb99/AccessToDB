@@ -1,0 +1,36 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetCompleteRosterSP`(in GracePeriod int)
+BEGIN
+	SELECT
+		MAX( CASE WHEN um.meta_key = 'lASt_name' THEN um.meta_value END ) AS LastName,
+		MAX( CASE WHEN um.meta_key = 'first_name' THEN um.meta_value END ) AS FirstName,
+		CONCAT(MAX( CASE WHEN um.meta_key = 'last_name' THEN um.meta_value END), ', ',  MAX( CASE WHEN um.meta_key = 'first_name' THEN um.meta_value END )) AS Name,
+		MAX( CASE WHEN um.meta_key = 'skill_rating' THEN um.meta_value END ) AS Rating,
+		DATEDIFF(CURDATE(), pmu.enddate) AS Status,
+		DATE_FORMAT(pmu.enddate, '%M %d, %Y') AS RenewalDate,
+		u.user_email AS EmailAddress,
+		MAX( CASE WHEN um.meta_key = 'billing_phone' THEN um.meta_value else '' END ) AS HomePhone,
+		MAX( CASE WHEN um.meta_key = 'other_phone' THEN um.meta_value else '' END ) AS OtherPhone,
+		MAX( CASE WHEN um.meta_key = 'billing_address_1' THEN um.meta_value else '' END ) AS Address1,
+		MAX( CASE WHEN um.meta_key = 'billing_address_2' THEN um.meta_value else '' END ) AS Address2,
+		MAX( CASE WHEN um.meta_key = 'billing_city' THEN um.meta_value else '' END ) AS City,
+		MAX( CASE WHEN um.meta_key = 'billing_state' THEN um.meta_value else '' END ) AS State,
+		MAX( CASE WHEN um.meta_key = 'billing_postcode' THEN um.meta_value else '' END ) AS Zip,
+		MAX( CASE WHEN um.meta_key = 'gender' THEN um.meta_value else '' END ) AS Gender,
+		concat(concat(max( case when um.meta_key = 'first_name' then trim(um.meta_value) end), ' ',  max( case when um.meta_key = 'last_name' then trim(um.meta_value) end )), ' ', max( case when um.meta_key = 'billing_city'         then trim(um.meta_value) end ), ' ', max( case when um.meta_key = 'billing_postcode'     then trim(um.meta_value) end )) as UniqueMemberName,
+		MAX( CASE WHEN um.meta_key = 'deceased' THEN um.meta_value else '' END ) AS Deceased,
+		MAX( CASE WHEN um.meta_key = 'email_privacy' THEN um.meta_value else '' END) AS EmailPrivacy
+	FROM
+		wpFegK6_users u 
+			INNER JOIN
+		wpFegK6_usermeta um ON u.ID = um.user_id
+			INNER JOIN
+		wpFegK6_pmpro_memberships_users pmu ON u.ID = pmu.user_id
+	WHERE
+	   pmu.enddate > DATE_SUB(CURDATE(), INTERVAL GracePeriod DAY)
+	AND
+	   pmu.status = 'active'
+	GROUP BY
+	   u.ID
+	ORDER BY
+	   LastName, FirstName;
+END

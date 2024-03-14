@@ -1,0 +1,5 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `CreatePaymentDetailSP`(in UserID int, in Level int, in Status varchar(50), in InitialPayment decimal, in StartDate datetime, in EndDate datetime)
+BEGIN
+insert into wpFegK6_pmpro_memberships_users (user_id, membership_id, status, initial_payment, startdate, enddate) 
+values (UserID, Level, Status, InitialPayment, StartDate, EndDate);
+END

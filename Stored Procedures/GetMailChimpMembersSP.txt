@@ -1,0 +1,22 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetMailChimpMembersSP`(in paramGracePeriod int)
+BEGIN
+select
+   max( case when um.meta_key = 'last_name'            then um.meta_value end ) as LastName,
+   max( case when um.meta_key = 'first_name'           then um.meta_value end ) as FirstName,
+   max( case when um.meta_key = 'deceased'             then um.meta_value else '' end) as Deceased,
+   max( case when um.meta_key = 'billing_email'        then um.meta_value else '' end) as BillingEmail,
+   u.user_email as Email
+from
+   wpFegK6_users u
+       join
+    wpFegK6_usermeta um on u.ID = um.user_id
+       join     
+	wpFegK6_pmpro_memberships_users pm on u.ID = pm.user_id
+       where
+           pm.enddate >= DATE_SUB(curdate(), INTERVAL paramGracePeriod DAY) 
+	   and (u.user_email not like 'stpc%')
+group by
+   um.user_id
+order by
+   LastName, FirstName;
+END

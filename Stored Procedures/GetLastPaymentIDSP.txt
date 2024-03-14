@@ -1,0 +1,11 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetLastPaymentIDSP`(in UserID int)
+BEGIN
+	SELECT 
+		* 
+	FROM 
+		wpFegK6_pmpro_memberships_users pmu
+	WHERE 
+		pmu.user_id=UserID
+	ORDER BY 
+		pmu.id DESC LIMIT 1;
+END

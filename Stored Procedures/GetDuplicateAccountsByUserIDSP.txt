@@ -1,0 +1,13 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetDuplicateAccountsByUserIDSP`(in paramUserID int)
+BEGIN
+    select
+        id as ID,
+        userID as UserID,
+        lastName as LastName,
+        firstName as FirstName,
+        modified as Modified
+	from
+        wpFegK6_duplicate_accounts
+	where
+        userID = paramUserID;
+END

@@ -1,0 +1,30 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetRosterRecipientsSP`(in GracePeriod int)
+BEGIN
+select 
+   max( case when um.meta_key = 'last_name'            then trim(um.meta_value) end ) as LastName,
+   max( case when um.meta_key = 'first_name'           then trim(um.meta_value) end ) as FirstName,
+   concat(max( case when um.meta_key = 'last_name' then trim(um.meta_value) end), ', ',  max( case when um.meta_key = 'first_name' then trim(um.meta_value) end )) as Name,
+   concat(max( case when um.meta_key = 'first_name' then trim(um.meta_value) end), ' ',  max( case when um.meta_key = 'last_name' then trim(um.meta_value) end )) as FirstNameLastName,
+   max( case when um.meta_key = 'billing_address_1'    then trim(um.meta_value) end ) as Address1,
+   max( case when um.meta_key = 'billing_address_2'    then trim(um.meta_value) end ) as Address2,
+   trim(concat(max( case when um.meta_key = 'billing_address_1' then trim(um.meta_value) end), ' ', max( case when um.meta_key = 'billing_address_2' then trim(um.meta_value) end ))) as Street,
+   max( case when um.meta_key = 'billing_city'         then trim(um.meta_value) end ) as City,
+   max( case when um.meta_key = 'billing_state'        then trim(um.meta_value) end ) as State,
+   max( case when um.meta_key = 'billing_postcode'     then trim(um.meta_value) end ) as Zip,
+   concat(max( case when um.meta_key = 'billing_state' then trim(um.meta_value) end), ' ',  max( case when um.meta_key = 'billing_postcode' then trim(um.meta_value) end )) as StateAndZip,
+   concat(concat(max( case when um.meta_key = 'first_name' then trim(um.meta_value) end), ' ',  max( case when um.meta_key = 'last_name' then trim(um.meta_value) end )), ' ', max( case when um.meta_key = 'billing_city'         then trim(um.meta_value) end ), ' ', max( case when um.meta_key = 'billing_postcode'     then trim(um.meta_value) end )) as UniqueMemberName,
+   max( case when um.meta_key = 'deceased'             then trim(um.meta_value) else '' end ) as Deceased,
+   trim(u.user_email) as EmailAddress
+from
+   wpFegK6_users u
+       join
+    wpFegK6_usermeta um on u.ID = um.user_id
+       join     
+	wpFegK6_pmpro_memberships_users pm on u.ID = pm.user_id
+       where
+          pm.enddate >= date_sub(curdate(), interval GracePeriod day) and pm.status = 'active' and (pm.membership_id = 2 or pm.membership_id = 4 or pm.membership_id = 5 or pm.membership_id = 6)
+group by
+   um.user_id
+order by
+   LastName, FirstName;
+END

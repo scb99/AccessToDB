@@ -1,0 +1,41 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetMembersWithTooManyQuickBooksEntriesSP`()
+BEGIN
+select 
+    um.user_id as ID, 
+    max( case when um.meta_key = 'last_name' then um.meta_value end ) as LastName,
+    max( case when um.meta_key = 'first_name' then um.meta_value end ) as FirstName,
+    concat( max( case when um.meta_key = 'last_name' then um.meta_value end ), ', ',
+            max( case when um.meta_key = 'first_name' then um.meta_value end ) ) as Name
+from   
+   (select distinct
+        user_id as ID
+    from
+        wpFegK6_pmpro_memberships_users
+    where
+        enddate >= curdate()) as t0
+        join
+    wpFegK6_usermeta um on t0.ID = um.user_id
+		join
+		   (select 
+			   t1.user_id
+			from   
+			   (select   
+				  user_id, count(user_id) as QB
+				from     
+				   wpFegK6_quick_books
+				where 
+				   membership_id > 0
+				group by user_id) as t1
+			join 
+			   (select   
+				   user_id, count(user_id) as PH
+				from     
+				   wpFegK6_pmpro_memberships_users pmu
+				 group by user_id) as t2 on t1.user_id = t2.user_id
+			where 
+			   QB > PH) as t3 on t3.user_id = um.user_id
+group by 
+    um.user_id
+order by
+    Name;
+END

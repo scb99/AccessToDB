@@ -1,0 +1,5 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `CreateQuickBooksCustomerSP`(in userID int, in membershipID int, in payment varchar(256), in paymentDate date, in memo varchar(256))
+BEGIN
+insert into wpFegK6_quick_books (user_id, membership_id, payment, payment_date, memo)
+values (userID, membershipID, payment, paymentDate, memo);
+END

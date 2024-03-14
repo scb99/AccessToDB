@@ -1,0 +1,31 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetSubscriptionsSP`()
+BEGIN
+	select 
+	   ID as ID,
+       post_author as PostAuthor,
+       post_date as PostDate,
+       post_date_gmt as PostDateGmt,
+       post_content as PostContent,
+       post_title as PostTitle,
+       post_excerpt as PostExcerpt,
+       post_status as PostStatus,
+       comment_status as PostCommentStatus,
+       ping_status as PingStatus,
+       post_password as PostPassword,
+       post_name as PostName,
+       to_ping as ToString1,
+       pinged as Pinged,
+       post_modified as PostModified,
+       post_modified_gmt as PostModifiedGmt,
+       post_content_filtered as PostContentFiltered,
+       post_parent as PostParent,
+       guid as Guid,
+       menu_order as MenuOrder,
+       post_type as PostType,
+       post_mime_type as PostMimeType,
+       comment_count as CommentCount
+	from 
+	   wpFegK6_posts 
+	where 
+	   post_type = 'shop_subscription';
+END

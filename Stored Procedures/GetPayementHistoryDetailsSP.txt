@@ -1,0 +1,18 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetPayementHistoryDetailsSP`(in UserID int)
+BEGIN
+select 
+    id as ID,
+	user_id as UserID,
+	membership_id as MembershipID,
+	initial_payment as InitialPayment,
+	status as Status,
+	startdate as StartDate,
+	enddate as EndDate,
+	modified as ModifiedDate
+from   
+   wpFegK6_pmpro_memberships_users
+where  
+   user_id = UserID
+order by 
+   enddate desc, status;
+END

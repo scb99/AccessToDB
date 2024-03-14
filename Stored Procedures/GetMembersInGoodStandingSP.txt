@@ -1,0 +1,11 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetMembersInGoodStandingSP`()
+BEGIN
+select
+    distinct pmu.user_id as ID
+from 
+    wpFegK6_pmpro_memberships_users pmu
+where
+    pmu.enddate >= curdate()
+order by
+    pmu.user_id;
+END

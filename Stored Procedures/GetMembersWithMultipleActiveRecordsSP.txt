@@ -1,0 +1,25 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetMembersWithMultipleActiveRecordsSP`()
+BEGIN
+select 
+    t1.user_id as ID, 
+    max( case when um.meta_key = 'last_name' then um.meta_value end ) as LastName,
+    max( case when um.meta_key = 'first_name' then um.meta_value end ) as FirstName,
+    concat( max( case when um.meta_key = 'last_name' then um.meta_value end ), ', ',
+            max( case when um.meta_key = 'first_name' then um.meta_value end ) ) as Name
+from 
+    wpFegK6_usermeta um
+        join
+	(select
+		pmu.user_id
+	from
+		wpFegK6_pmpro_memberships_users pmu
+	where
+		pmu.status = 'active'
+	group by
+		pmu.user_id, pmu.status
+	having count(*) > 1) as t1 on t1.user_id = um.user_id
+group by 
+	t1.user_id
+order by 
+    Name;
+END

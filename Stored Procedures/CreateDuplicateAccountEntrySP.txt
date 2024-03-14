@@ -1,0 +1,6 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `CreateDuplicateAccountEntrySP`(in UserID int, in LastName varchar(45), in FirstName varchar(45))
+BEGIN
+    insert 
+	into wpFegK6_duplicate_accounts(userID, lastName, firstName)
+	values (UserID, LastName, FirstName);
+END

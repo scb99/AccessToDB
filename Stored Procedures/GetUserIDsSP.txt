@@ -1,0 +1,16 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetUserIDsSP`()
+BEGIN
+select
+    um1.user_id as ID,
+    um2.meta_value as LastName,
+    um1.meta_value as FirstName,
+    concat(um2.meta_value, ', ', um1.meta_value) as Name
+from
+    wpFegK6_usermeta um1
+        inner join
+	wpFegK6_usermeta um2 on um1.user_id = um2.user_id 
+where
+    um1.meta_key = 'first_name' and um2.meta_key = 'last_name'
+order by
+    um1.user_id;
+END

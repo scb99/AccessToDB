@@ -1,0 +1,40 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetNewMembersSP`(in date1 date, in date2 date)
+BEGIN
+select
+   um.user_id as ID,
+   max( case when um.meta_key = 'last_name'            then um.meta_value else '' end ) as LastName,
+   max( case when um.meta_key = 'first_name'           then um.meta_value else '' end ) as FirstName,
+   concat(max( case when um.meta_key = 'last_name' then um.meta_value end), ', ',  max( case when um.meta_key = 'first_name' then um.meta_value end )) as Name,
+   max( case when um.meta_key = 'gender'               then um.meta_value else '' end ) as Gender,
+   max( case when um.meta_key = 'skill_rating'         then um.meta_value else '' end) as Rating,
+   max( case when um.meta_key = 'billing_address_1'    then um.meta_value else '' end) as Address1,
+   max( case when um.meta_key = 'billing_address_2'    then um.meta_value else '' end) as Address2,
+   max( case when um.meta_key = 'billing_phone'        then um.meta_value else '' end) as HomePhone,
+   max( case when um.meta_key = 'billing_city'         then um.meta_value else '' end ) as City,
+   max( case when um.meta_key = 'billing_state'        then um.meta_value else '' end ) as State,
+   max( case when um.meta_key = 'billing_postcode'     then um.meta_value else '' end ) as Zip,
+   pm.startdate as StartDate,
+   max( pm2.enddate ) as EndDate,
+   max( pm2.enddate ) >= CURDATE() as MemberInGoodStanding,
+   u.user_email as EmailAddress  
+from
+   wpFegK6_users u
+join
+   wpFegK6_usermeta um 
+on 
+   u.ID = um.user_id
+join     
+   wpFegK6_pmpro_memberships_users as pm 
+on 
+   u.ID = pm.user_id
+join 
+   wpFegK6_pmpro_memberships_users as pm2
+on 
+   u.ID = pm2.user_id
+where
+    pm.startdate between date1 and DATE_ADD(date2, INTERVAL 1 DAY) and not exists (select id from wpFegK6_pmpro_memberships_users where startdate < date1 and user_ID = u.ID)
+group by
+   um.user_id
+order by
+   LastName, FirstName;
+END

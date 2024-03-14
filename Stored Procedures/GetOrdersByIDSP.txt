@@ -1,0 +1,64 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetOrdersByIDSP`(in UserID int)
+BEGIN
+SELECT 
+    t5.ID AS OrderID, 
+    t5.Purchased AS Purchased, 
+    oim.meta_value AS Qty, 
+    t5.Date AS Date, 
+    t5.Total AS Total, 
+    t5.PaymentMethod AS PaymentMethod
+FROM 
+    wpFegK6_woocommerce_order_itemmeta oim
+        JOIN
+	(SELECT 
+         t4.ID, 
+         t4.OrderItemID, 
+         t4.Purchased, 
+         t4.Date, 
+         t4.Total, 
+         pm2.meta_value AS PaymentMethod
+	 FROM 
+         wpFegK6_postmeta pm2
+		     JOIN
+		 (SELECT 
+              t3.ID, 
+              o.order_item_id AS OrderItemID, 
+              o.order_item_name AS Purchased, 
+              t3.Date AS Date, 
+              t3.Total AS Total, 
+              t3.PostType AS PostType
+		  FROM 
+              wpFegK6_woocommerce_order_items o
+			      JOIN
+			  (SELECT 
+			       pm.post_id AS ID, 
+                   t2.POSTDATE AS Date, 
+                   pm.meta_value AS Total, 
+                   t2.POSTTYPE AS PostType
+			   FROM 
+                   wpFegK6_postmeta pm
+				       JOIN
+				   (SELECT 
+					    p.ID, 
+                        p.post_date as POSTDATE, 
+                        p.post_type AS POSTTYPE
+					FROM 
+                        wpFegK6_posts p
+						    JOIN
+						(SELECT 
+						     pm.post_id AS ID
+						 FROM 
+							 wpFegK6_postmeta pm
+						 WHERE pm.meta_key='_customer_user' AND pm.meta_value=UserID) AS t1 
+						 ON p.ID = t1.ID
+					WHERE p.post_type = 'shop_order') AS t2
+					ON pm.post_id = t2.ID
+		       WHERE pm.meta_key = '_order_total') AS t3
+			   ON t3.ID = o.order_id) AS t4
+		  ON t4.ID = pm2.post_id
+		  WHERE /*pm2.meta_key = '_payment_method_title' OR*/ pm2.meta_key='_created_via') AS t5
+    ON t5.OrderItemId = oim.order_item_id
+    WHERE oim.meta_key = '_qty'
+ORDER BY 
+    t5.Date DESC;
+END

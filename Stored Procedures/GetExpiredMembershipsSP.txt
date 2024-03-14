@@ -1,0 +1,35 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetExpiredMembershipsSP`(in Date1 date, in Date2 date)
+BEGIN
+	select
+	   um.user_id as ID,
+	   max( case when um.meta_key = 'last_name'            then um.meta_value else '' end ) as LastName,
+	   max( case when um.meta_key = 'first_name'           then um.meta_value else '' end ) as FirstName,
+	   concat(max( case when um.meta_key = 'last_name' then um.meta_value end), ', ',  max( case when um.meta_key = 'first_name' then um.meta_value end )) as Name,
+	   max( case when um.meta_key = 'billing_phone'        then um.meta_value else '' end ) as HomePhone,
+	   max( case when um.meta_key = 'other_phone'          then um.meta_value else '' end ) as OtherPhone,
+	   max( case when um.meta_key = 'billing_address_1'    then um.meta_value else '' end ) as Address1,
+	   max( case when um.meta_key = 'billing_address_2'    then um.meta_value else '' end ) as Address2,
+	   max( case when um.meta_key = 'billing_city'         then um.meta_value else '' end ) as City,
+	   max( case when um.meta_key = 'billing_state'        then um.meta_value else '' end ) as State,
+	   max( case when um.meta_key = 'billing_postcode'     then um.meta_value else '' end ) as Zip,
+	   u.user_email as EmailAddress,
+	   date_format(mu.enddate, '%M %d, %Y') as RenewalDate,
+	   datediff(curdate(), mu.enddate) as Status,
+	   max( case when um.meta_key = 'expiration_notice'    then um.meta_value else '' end ) as ExpirationNotice,
+	   max( case when um.meta_key = 'deceased'             then um.meta_value else '' end ) as Deceased,
+	   max( case when um.meta_key = 'contact'              then um.meta_value else '' end ) as Contact
+	from
+	   wpFegK6_users as u
+		  join
+	   wpFegK6_usermeta as um on u.ID = um.user_id
+		  join
+	   wpFegK6_pmpro_memberships_users mu on u.ID = mu.user_id
+	where
+	   mu.status  = 'active'
+	and    
+	   mu.enddate between Date1 and DATE_ADD(DATE_ADD(Date2, INTERVAL 1 DAY), INTERVAL -1 SECOND)
+	group by
+	   u.ID
+	order by
+	   LastName, FirstName;
+END

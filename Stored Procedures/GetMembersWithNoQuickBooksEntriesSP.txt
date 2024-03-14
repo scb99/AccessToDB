@@ -1,0 +1,21 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetMembersWithNoQuickBooksEntriesSP`()
+BEGIN
+select 
+    um.user_id as ID, 
+    max( case when um.meta_key = 'last_name' then um.meta_value end ) as LastName,
+    max( case when um.meta_key = 'first_name' then um.meta_value end ) as FirstName,
+    concat( max( case when um.meta_key = 'last_name' then um.meta_value end ), ', ',
+            max( case when um.meta_key = 'first_name' then um.meta_value end ) ) as Name
+from 
+    wpFegK6_usermeta um
+        left join 
+	wpFegK6_quick_books qb on um.user_id = qb.user_id
+        join
+	wpFegK6_pmpro_memberships_users pmu on um.user_id = pmu.user_id
+where 
+   (qb.user_id is null) and (pmu.enddate >= curdate()) and (um.user_id <> 3964 and um.user_id <> 3381 and um.user_id <> 3890 and um.user_id <> 3401 and um.user_id <> 3425)
+group by 
+	um.user_id
+order by 
+    Name; 
+END

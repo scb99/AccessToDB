@@ -1,0 +1,23 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetRosterForICTSP`(in GracePeriod int)
+BEGIN
+select
+   max( case when um.meta_key = 'last_name'            then um.meta_value end ) as LastName,
+   max( case when um.meta_key = 'first_name'           then um.meta_value end ) as FirstName,
+   concat(max( case when um.meta_key = 'last_name' then um.meta_value end), ', ',  max( case when um.meta_key = 'first_name' then um.meta_value end )) as Name,
+   max( case when um.meta_key = 'skill_rating' then um.meta_value end ) as Rating,
+   max( case when um.meta_key = 'billing_phone'        then um.meta_value end ) as HomePhone,
+   date_format(pm.enddate, '%M %d, %Y') as EndDate,
+   max( case when um.meta_key = 'deceased'             then um.meta_value end ) as Deceased
+from
+   wpFegK6_users u
+       join
+    wpFegK6_usermeta um on u.ID = um.user_id
+       join 
+	wpFegK6_pmpro_memberships_users pm on u.ID = pm.user_id
+	   where    pm.status = 'active'
+       and      pm.enddate >= DATE_SUB(curdate(), INTERVAL GracePeriod DAY)
+group by
+   um.user_id
+order by
+   LastName, FirstName;
+END

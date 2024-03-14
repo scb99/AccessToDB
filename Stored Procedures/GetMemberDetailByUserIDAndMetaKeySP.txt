@@ -1,0 +1,12 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetMemberDetailByUserIDAndMetaKeySP`(in paramUserID int, in MetaKey varchar(255))
+BEGIN
+	SELECT 
+		um.umeta_id AS ID,
+		um.user_id AS UserID,
+		um.meta_key AS Property,
+		um.meta_value AS Value
+	FROM 
+		wpFegK6_usermeta um
+	WHERE 
+	   um.user_id = paramUserID AND um.meta_key = MetaKey;
+END

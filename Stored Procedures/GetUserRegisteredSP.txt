@@ -1,0 +1,9 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetUserRegisteredSP`(in MemberID int)
+BEGIN
+	select
+		user_registered 
+	from 
+		wpFegK6_users
+	where
+		ID = MemberID;
+END

@@ -1,0 +1,29 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetVolunteersSP`(in MetaKey varchar(30))
+BEGIN
+select
+   u.ID as ID,
+   max( case when um.meta_key = 'last_name' then um.meta_value end ) as LastName,
+   max( case when um.meta_key = 'first_name' then um.meta_value end ) as FirstName,
+   concat(max( case when um.meta_key = 'last_name' then um.meta_value end), ', ',  max( case when um.meta_key = 'first_name' then um.meta_value end )) as Name,
+   u.user_email as Email,
+   max( case when um.meta_key = 'billing_phone' then um.meta_value end ) as HomePhone,
+   max( case when um.meta_key = 'deceased'             then um.meta_value end) as Deceased
+from
+   wpFegK6_users u 
+      join
+   wpFegK6_usermeta um on u.ID = um.user_id
+      join   
+   wpFegK6_pmpro_memberships_users mu on u.ID = mu.user_id
+      join
+   wpFegK6_usermeta um2 on u.ID = um2.user_id  
+where  
+   um2.meta_key = MetaKey
+      and 
+   um2.meta_value = 'Yes'
+      and
+   mu.enddate >= CURDATE()
+group by
+   u.ID
+order by
+   LastName, FirstName;
+END

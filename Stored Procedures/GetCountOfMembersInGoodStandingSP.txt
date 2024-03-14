@@ -1,0 +1,9 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetCountOfMembersInGoodStandingSP`()
+BEGIN
+	SELECT 
+		COUNT(DISTINCT pmu.user_id) AS Result
+	FROM  
+		wpFegK6_pmpro_memberships_users pmu
+	WHERE 
+		pmu.enddate >= CURDATE();
+END

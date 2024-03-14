@@ -1,0 +1,20 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetAllMembersSP`()
+BEGIN
+	SELECT
+		um1.user_id AS ID,
+		um2.meta_value AS LastName,
+		um1.meta_value AS FirstName,
+		CONCAT(um2.meta_value, ', ', um1.meta_value) AS Name,
+        u.user_email AS EmailAddress,
+        u.user_registered AS UserRegistered
+	FROM
+		wpFegK6_usermeta um1 
+			INNER JOIN 
+		wpFegK6_usermeta um2 ON um1.user_id = um2.user_id
+            INNER JOIN
+		wpFegK6_users u ON um1.user_id = u.ID
+	WHERE
+		um1.meta_key = 'first_name' AND um2.meta_key = 'last_name'
+	ORDER BY
+	   LastName, FirstName;
+END

@@ -1,0 +1,19 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetLogEntriesSP`(in Date1 date, in Date2 date)
+BEGIN
+	select 
+    log.UserID, 
+    log.MessageType, 
+    log.Message,
+    log.TimeStamp,
+    concat(max( case when um.meta_key = 'first_name' then um.meta_value end), ' ',  max( case when um.meta_key = 'last_name' then um.meta_value end )) as Name
+from 
+    wpFegK6_users as u
+	    join
+	wpFegK6_usermeta as um on u.ID = um.user_id
+		  join
+    wpFegK6_logs as log on log.UserID = u.ID
+where 
+    log.TimeStamp between Date1 and DATE_ADD(Date2, INTERVAL 1 DAY)
+group by
+    log.ID;
+END

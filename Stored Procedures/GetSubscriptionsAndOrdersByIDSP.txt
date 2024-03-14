@@ -1,0 +1,12 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetSubscriptionsAndOrdersByIDSP`(in DuplicateID int)
+BEGIN
+    select
+        pm.meta_id as MetaID,
+        pm.post_id as PostID,
+        pm.meta_key as MetaKey,
+        pm.meta_value as MetaValue
+    from
+        wpFegK6_postmeta pm
+	where
+        meta_key='_customer_user' and meta_value=DuplicateID;
+END

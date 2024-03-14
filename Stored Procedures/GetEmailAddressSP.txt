@@ -1,0 +1,10 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetEmailAddressSP`(in UserID int)
+BEGIN
+	SELECT 
+		u.id AS UserID,
+		u.user_email AS EmailAddress
+	FROM 
+		wpFegK6_users u
+	WHERE 
+		id = UserID;
+END

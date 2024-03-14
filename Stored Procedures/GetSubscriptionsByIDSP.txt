@@ -1,0 +1,37 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetSubscriptionsByIDSP`(in UserID int)
+BEGIN
+SELECT
+    t1.UserID as UserID, 
+    t1.SubscriptionID AS SubscriptionID, 
+    t1.Status AS Status, 
+    o.order_item_name AS Item, 
+    t1.Total AS Total, 
+    t1.PaidDate AS PaidDate, 
+    t1.NextPayment AS NextPaymentDate, 
+    t1.BillingFirstName AS BillingFirstName,
+    t1.BillingLastName AS BillingLastName
+FROM 
+    wpFegK6_woocommerce_order_items o
+        INNER JOIN
+    ((SELECT
+        MAX( CASE WHEN pm.meta_key = '_customer_user' AND p.ID = pm.post_id THEN pm.meta_value END ) AS UserID,
+        p.ID AS SubscriptionID,
+        p.post_status AS Status,
+        MAX( CASE WHEN pm.meta_key = '_billing_first_name' AND p.ID = pm.post_id THEN pm.meta_value END ) AS BillingFirstName,
+        MAX( CASE WHEN pm.meta_key = '_billing_last_name' AND p.ID = pm.post_id THEN pm.meta_value END ) AS BillingLastName,
+        MAX( CASE WHEN pm.meta_key = '_order_total' AND p.ID = pm.post_id THEN pm.meta_value END ) AS Total,
+        p.post_date AS PaidDate,
+        MAX( CASE WHEN pm.meta_key = '_schedule_next_payment' AND p.ID = pm.post_ID THEN pm.meta_value END ) AS NextPayment
+    FROM
+        wpFegK6_posts p
+            INNER JOIN
+        wpFegK6_postmeta pm ON p.ID = pm.post_id
+    WHERE
+        p.post_type = 'shop_subscription' 
+    GROUP BY
+        p.ID) AS t1) ON o.order_id = t1.SubscriptionID
+WHERE 
+    t1.UserID = UserID 
+ORDER BY 
+    t1.PaidDate DESC;
+END

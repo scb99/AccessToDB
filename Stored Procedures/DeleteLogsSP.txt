@@ -1,0 +1,4 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `DeleteLogsSP`()
+BEGIN
+	delete from wpFegK6_logs where TimeStamp < (now() - interval 7 day) limit 5000;
+END

@@ -1,0 +1,16 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetQuickBooksDetailsSP`(in UserID int)
+BEGIN
+select   
+   user_id as ID,
+   membership_id as MembershipID,
+   payment as Payment,
+   memo as Memo,
+   payment_date as PaymentDate,
+   modified as ModifiedDate
+from     
+   wpFegK6_quick_books
+where    
+   user_id = UserID
+order by 
+   payment_date desc;
+END

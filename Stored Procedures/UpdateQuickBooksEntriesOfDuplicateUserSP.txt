@@ -1,0 +1,11 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `UpdateQuickBooksEntriesOfDuplicateUserSP`(in ExistingID int, in DuplicateID int)
+BEGIN
+    update 
+        wpFegK6_quick_books
+    set 
+        user_id = ExistingID
+    where 
+        user_id = DuplicateID
+	limit 
+        20;
+END

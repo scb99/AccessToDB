@@ -1,0 +1,6 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `CreateMemberDetailDateTimeSP`(in UserID int, in MetaKey varchar(50), in MetaValue datetime)
+BEGIN
+insert 
+into wpFegK6_usermeta(user_id, meta_key, meta_value)
+values (UserID, MetaKey, MetaValue);
+END

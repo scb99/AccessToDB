@@ -1,0 +1,11 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `UpdatePaymentDetailOfDuplicateUserSP`(in ExistingID int, in DuplicateID int)
+BEGIN
+    update 
+        wpFegK6_pmpro_memberships_users
+    set 
+        user_id = ExistingID
+    where 
+        user_id = DuplicateID
+	limit 
+        20;
+END

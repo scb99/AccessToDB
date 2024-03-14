@@ -1,0 +1,11 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `UpdateMemberDetailSP`(in MetaID int, in UserID int, in MetaKey varchar(100), in MetaValue varchar(150))
+BEGIN
+	update 
+	   wpFegK6_usermeta 
+	set 
+	   user_id = UserID, 
+	   meta_key = MetaKey, 
+	   meta_value = MetaValue 
+	where 
+	   umeta_id = MetaID;
+END

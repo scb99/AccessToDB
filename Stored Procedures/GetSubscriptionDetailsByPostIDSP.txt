@@ -1,0 +1,12 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetSubscriptionDetailsByPostIDSP`(in PostID int)
+BEGIN
+	select 
+	   meta_id as MetaID,
+       post_id as PostID,
+       meta_key as MetaKey,
+       meta_value as MetaValue
+	from 
+	   wpFegK6_postmeta 
+	where 
+	   post_id = PostID;
+END

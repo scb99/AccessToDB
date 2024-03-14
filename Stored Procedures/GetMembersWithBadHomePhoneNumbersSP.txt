@@ -1,0 +1,31 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetMembersWithBadHomePhoneNumbersSP`()
+BEGIN
+	select 
+		um1.ID as ID,
+		um1.LastName,
+		um1.FirstName,
+		um1.Name
+	from
+		(select
+			um.user_id as ID,
+			max( case when um.meta_key = 'last_name' then um.meta_value end ) as LastName,
+			max( case when um.meta_key = 'first_name' then um.meta_value end ) as FirstName,
+			concat( max( case when um.meta_key = 'last_name' then um.meta_value end ), ', ',
+					max( case when um.meta_key = 'first_name' then um.meta_value end ) ) as Name
+		 from 
+			wpFegK6_usermeta um
+		 group by 
+			um.user_id
+		 order by 
+			Name) as um1
+		join
+			(select 
+				um.user_id as ID
+			from 
+				wpFegK6_usermeta um
+			where  
+				meta_key = 'billing_phone' and meta_value not like '___-___-____') as t1
+		on um1.ID = t1.ID
+	order by
+		um1.Name;
+END

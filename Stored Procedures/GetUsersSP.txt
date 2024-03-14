@@ -1,0 +1,16 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetUsersSP`()
+BEGIN
+	select 
+	    ID as ID,
+        user_login as UserLogin,
+        user_pass as UserPass,
+        user_nicename as UserNicename,
+        user_email as UserEmail,
+        user_url as UserUrl,
+        user_registered as UserRegistered,
+        user_activation_key as UserActivationKey,
+        user_status as UserStatus,
+        display_name as DisplayName
+	from 
+	   wpFegK6_users;
+END

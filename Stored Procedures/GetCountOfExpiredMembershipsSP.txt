@@ -1,0 +1,9 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetCountOfExpiredMembershipsSP`()
+BEGIN
+	SELECT 
+		COUNT(DISTINCT pmu.user_id) AS Result
+	FROM  
+		wpFegK6_pmpro_memberships_users pmu
+	WHERE 
+		pmu.enddate < CURDATE() AND pmu.status = 'active';
+END

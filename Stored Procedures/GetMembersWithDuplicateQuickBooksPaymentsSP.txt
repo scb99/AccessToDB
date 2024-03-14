@@ -1,0 +1,33 @@
+CREATE DEFINER=`seniorte_S5pzG5A`@`%` PROCEDURE `GetMembersWithDuplicateQuickBooksPaymentsSP`()
+BEGIN
+select 
+    um1.ID as ID,
+    um1.LastName,
+    um1.FirstName,
+    um1.Name,
+    payment_date
+from
+	(select
+        um.user_id as ID,
+        max( case when um.meta_key = 'last_name' then um.meta_value end ) as LastName,
+        max( case when um.meta_key = 'first_name' then um.meta_value end ) as FirstName,
+	    concat( max( case when um.meta_key = 'last_name' then um.meta_value end ), ', ',
+                max( case when um.meta_key = 'first_name' then um.meta_value end ) ) as Name
+     from 
+        wpFegK6_usermeta um
+     group by 
+	    um.user_id
+     order by 
+        Name) as um1
+        join
+	(select 
+		 user_id, payment, payment_date
+	 from 
+		 wpFegK6_quick_books
+	  group by 
+		 payment_date, user_id, payment
+	  having count(*) > 1) as qb 
+		 on um1.ID = qb.user_id
+order by
+   um1.Name;
+END
