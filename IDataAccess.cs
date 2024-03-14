@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary;
 
-public interface IDataAccess
+public interface IDataAccess //
 {
     // Read
 
