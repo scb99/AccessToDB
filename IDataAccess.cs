@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary;
 
-public interface IDataAccess // Why doesn't this get sent to Github1
+public interface IDataAccess
 {
     // Read
 
