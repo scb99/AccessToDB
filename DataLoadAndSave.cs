@@ -8,14 +8,14 @@ Update
 Delete
 
 These four operations are often abbreviated as CRUD. 
-The LoadDataAsync method is used to read data from the database. T
-he SaveDataAsync method is used to create, update, or delete data in the database.
+The LoadDataAsync method is used to read data from the database. 
+The SaveDataAsync method is used to create, update, or delete data in the database.
 
 This class implements the IDataAccess interface. The LoadDataAsync method uses the Dapper library to read data from the database. 
 The SaveDataAsync method uses the Dapper library to create, update, or delete data in the database.
 
 A database can be accessed using a connection string. The connection string is a string that contains the information needed to connect to a database.
-A reference for constructing a connection string for a MySQL database can be found at https://www.connectionstrings.com/mysql/.
+A reference for constructing a connection string for a MySQL database can be found at https://www.connectionstrings.com/mysql/. 
 
 */
 
