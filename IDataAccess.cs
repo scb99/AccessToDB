@@ -1,16 +1,23 @@
-﻿using System.Collections.Generic;
+﻿/*
+
+In this file, we define the interface for the DataAccess class. 
+This interface will be used to define the methods that will be used to interact with the database. 
+The methods will be used to read, create, update, and delete data from the database. 
+The methods will be implemented in the DataAccess class.
+
+*/
+
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DataLibrary;
 
 public interface IDataAccess 
 {
-    // Read
+    // Read from the database
+    Task<List<T>> ReadDataFromDBAsync<T, U>(string sql, U parameters, string connectionString);
 
-    Task<List<T>> LoadDataAsync<T, U>(string sql, U parameters, string connectionString);
 
-
-    // Create, Delete, and Update
-
-    Task<int> SaveDataAsync<T>(string sql, T parameters, string connectionString);
+    // Create, Delete, and Update in the database
+    Task<int> SaveDataToDBAsync<T>(string sql, T parameters, string connectionString);
 }

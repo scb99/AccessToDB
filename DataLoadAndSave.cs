@@ -8,11 +8,11 @@ Update
 Delete
 
 These four operations are often abbreviated as CRUD. 
-The LoadDataAsync method is used to read data from the database. 
-The SaveDataAsync method is used to create, update, or delete data in the database.
+The ReadDataFromDBAsync method is used to read data from the database. 
+The SaveDataToDBAsync method is used to create, update, or delete data in the database.
 
-This class implements the IDataAccess interface. The LoadDataAsync method uses the Dapper library to read data from the database. 
-The SaveDataAsync method uses the Dapper library to create, update, or delete data in the database.
+This class implements the IDataAccess interface. The ReadDataFromDBAsync method uses the Dapper library to read data from the database. 
+The SaveDataToDBAsync method uses the Dapper library to create, update, or delete data in the database.
 
 A database can be accessed using a connection string. The connection string is a string that contains the information needed to connect to a database.
 A reference for constructing a connection string for a MySQL database can be found at https://www.connectionstrings.com/mysql/. 
@@ -32,7 +32,7 @@ public class DataLoadAndSave : IDataAccess
 {
     // Read
 
-    public async Task<List<T>> LoadDataAsync<T, U>(string sql, U parameters, string connectionString)
+    public async Task<List<T>> ReadDataFromDBAsync<T, U>(string sql, U parameters, string connectionString)
     {
         using IDbConnection connection = new MySqlConnection(connectionString);
 
@@ -57,7 +57,7 @@ public class DataLoadAndSave : IDataAccess
 
     // Create, Delete, and Update
 
-    public async Task<int> SaveDataAsync<T>(string sql, T parameters, string connectionString)
+    public async Task<int> SaveDataToDBAsync<T>(string sql, T parameters, string connectionString)
     {
         using IDbConnection connection = new MySqlConnection(connectionString);
 
