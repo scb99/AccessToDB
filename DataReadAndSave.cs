@@ -17,6 +17,8 @@ The SaveDataToDBAsync method uses the Dapper library to create, update, or delet
 A database can be accessed using a connection string. The connection string is a string that contains the information needed to connect to a database.
 A reference for constructing a connection string for a MySQL database can be found at https://www.connectionstrings.com/mysql/. 
 
+We use the convention of naming stored procedures with the suffix "SP" to indicate that they are stored procedures.
+
 */
 
 using Dapper;
