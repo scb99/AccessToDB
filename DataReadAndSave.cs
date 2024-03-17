@@ -28,7 +28,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary;
 
-public class DataLoadAndSave : IDataAccess 
+public class DataReadAndSave : IDataAccess 
 {
     // Read
 
