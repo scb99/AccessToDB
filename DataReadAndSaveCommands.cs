@@ -21,8 +21,7 @@ We use the convention of naming stored procedures with the suffix "SP" to indica
 
 */
 
-using Dapper;
-using MySql.Data.MySqlClient;
+using DataAbstractions.Dapper;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -30,27 +29,43 @@ using System.Threading.Tasks;
 
 namespace DataLibrary;
 
-public class DataReadAndSave : IDataAccess 
+public class DataReadAndSaveCommands(IDataAccessor dataAccessor) : IDataAccess 
 {
+    private readonly IDataAccessor _dataAccessor = dataAccessor;
+
     // Read
     public async Task<List<T>> ReadDataFromDBAsync<T, U>(string sql, U parameters, string connectionString)
     {
-        using IDbConnection connection = new MySqlConnection(connectionString);
+        try
+        {
+            _dataAccessor.Open();
 
-        var commandType = sql.EndsWith("SP") ? CommandType.StoredProcedure : CommandType.Text;
+            var commandType = sql.EndsWith("SP") ? CommandType.StoredProcedure : CommandType.Text;
 
-        var rows = await connection.QueryAsync<T>(sql, parameters, commandType: commandType);
+            var rows = await _dataAccessor.QueryAsync<T>(sql, parameters, commandType: commandType);
 
-        return rows.ToList();
+            return rows.ToList();
+        }
+        finally
+        {
+            _dataAccessor.Close();
+        }
     }
 
     // Create, Delete, and Update
     public async Task<int> SaveDataToDBAsync<T>(string sql, T parameters, string connectionString)
     {
-        using IDbConnection connection = new MySqlConnection(connectionString);
+        try
+        {
+            _dataAccessor.Open();
 
-        var commandType = sql.EndsWith("SP") ? CommandType.StoredProcedure : CommandType.Text;
+            var commandType = sql.EndsWith("SP") ? CommandType.StoredProcedure : CommandType.Text;
 
-        return await connection.ExecuteAsync(sql, parameters, commandType: commandType);
+            return await _dataAccessor.ExecuteAsync(sql, parameters, commandType: commandType);
+        }
+        finally
+        {
+            _dataAccessor.Close();
+        }
     }
 }
