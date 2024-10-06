@@ -34,7 +34,7 @@ public class DataReadAndSaveCommands(IDataAccessor dataAccessor) : IDataAccess
     private readonly IDataAccessor _dataAccessor = dataAccessor;
 
     // Read
-    public async Task<List<T>> ReadDataFromDBAsync<T, U>(string sql, U parameters, string connectionString)
+    public async Task<List<T>> ReadDataFromDBAsync<T, U>(string sql, U parameters)
     {
         try
         {
@@ -53,7 +53,7 @@ public class DataReadAndSaveCommands(IDataAccessor dataAccessor) : IDataAccess
     }
 
     // Create, Delete, and Update
-    public async Task<int> SaveDataToDBAsync<T>(string sql, T parameters, string connectionString)
+    public async Task<int> SaveDataToDBAsync<T>(string sql, T parameters)
     {
         try
         {

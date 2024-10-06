@@ -15,9 +15,8 @@ namespace DataLibrary;
 public interface IDataAccess 
 {
     // Read from the database
-    Task<List<T>> ReadDataFromDBAsync<T, U>(string sql, U parameters, string connectionString);
-
+    Task<List<T>> ReadDataFromDBAsync<T, U>(string sql, U parameters);
 
     // Create, Delete, and Update in the database
-    Task<int> SaveDataToDBAsync<T>(string sql, T parameters, string connectionString);
+    Task<int> SaveDataToDBAsync<T>(string sql, T parameters);
 }

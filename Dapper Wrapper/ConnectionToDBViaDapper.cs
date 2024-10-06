@@ -8,7 +8,7 @@ namespace DataAbstractions.Dapper;
 
 public class ConnectionToDBViaDapper(IDbConnection connection) : IDataAccessor
 {
-    private readonly IDbConnection _connection = connection ?? throw new ArgumentNullException(nameof(connection));
+    private readonly IDbConnection _connection = connection ?? throw new ArgumentNullException(); 
 
     public IDbConnection GetUnderlyingConnection() 
         => _connection;
