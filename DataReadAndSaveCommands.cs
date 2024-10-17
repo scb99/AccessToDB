@@ -39,11 +39,8 @@ public class DataReadAndSaveCommands(IDataAccessor dataAccessor) : IDataAccess
         try
         {
             _dataAccessor.Open();
-
             var commandType = sql.EndsWith("SP") ? CommandType.StoredProcedure : CommandType.Text;
-
             var rows = await _dataAccessor.QueryAsync<T>(sql, parameters, commandType: commandType);
-
             return rows.ToList();
         }
         finally
@@ -58,9 +55,7 @@ public class DataReadAndSaveCommands(IDataAccessor dataAccessor) : IDataAccess
         try
         {
             _dataAccessor.Open();
-
             var commandType = sql.EndsWith("SP") ? CommandType.StoredProcedure : CommandType.Text;
-
             return await _dataAccessor.ExecuteAsync(sql, parameters, commandType: commandType);
         }
         finally
