@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary;
 
-public interface IDataAccess 
+public interface IDataAccess
 {
     // Read from the database
     Task<List<T>> ReadDataFromDBAsync<T, U>(string sql, U parameters);

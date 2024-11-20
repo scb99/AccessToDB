@@ -29,7 +29,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary;
 
-public class DataReadAndSaveCommands(IDataAccessor dataAccessor) : IDataAccess 
+public class DataReadAndSaveCommands(IDataAccessor dataAccessor) : IDataAccess
 {
     private readonly IDataAccessor _dataAccessor = dataAccessor;
 
